@@ -8,6 +8,7 @@
 // =====================================================================
 using UnityEngine;
 using ARSurvival.Combat;
+using ARSurvival.Enemies;
 using ARSurvival.Player;
 
 namespace ARSurvival.Core
@@ -20,6 +21,7 @@ namespace ARSurvival.Core
         private GUIStyle button;
         private int health, maxHealth;
         private PlayerHealth playerHealth;
+        private EnemyFactory enemyFactory;
 
         private void OnEnable() => GameEvents.PlayerHealthChanged += OnHealth;
         private void OnDisable() => GameEvents.PlayerHealthChanged -= OnHealth;
@@ -49,6 +51,10 @@ namespace ARSurvival.Core
             ProjectilePool pool = ProjectilePool.For(Team.Player);
             if (pool != null)
                 GUILayout.Label($"Bullet pool: {pool.ActiveCount} flying / {pool.AvailableCount} ready", label);
+
+            if (enemyFactory == null) enemyFactory = FindAnyObjectByType<EnemyFactory>();
+            if (enemyFactory != null)
+                GUILayout.Label($"Enemies alive: {enemyFactory.AliveCount}", label);
 
             switch (gm.State)
             {

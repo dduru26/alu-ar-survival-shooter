@@ -6,7 +6,7 @@
 //  2. "Pools" object with a Player pool (30) and an Enemy pool (40)
 //  3. AR camera becomes the player: PlayerHealth, PlayerShooter, hitbox
 //  4. FeedbackCanvas: red DamageFlash overlay + centre crosshair
-//  5. TEMPORARY TrainingDummy cube in the Arena prefab
+//  (The temporary training dummy was removed in Phase 5.)
 // =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
@@ -37,14 +37,11 @@ namespace ARSurvival.EditorTools
 
             Material playerMat = UnlitMaterial(Root + "/Materials/PlayerBullet.mat", new Color(0.2f, 1f, 1f));
             Material enemyMat = UnlitMaterial(Root + "/Materials/EnemyBullet.mat", new Color(1f, 0.35f, 0.1f));
-            Material dummyMat = LitMaterial(Root + "/Materials/Dummy.mat", new Color(0.85f, 0.85f, 0.85f));
 
             Projectile playerBullet = BulletPrefab(Root + "/Prefabs/PlayerBullet.prefab", playerMat,
                                                    scale: 0.035f, speed: 9f, radius: 0.04f, trailTime: 0.12f);
             Projectile enemyBullet = BulletPrefab(Root + "/Prefabs/EnemyBullet.prefab", enemyMat,
                                                   scale: 0.06f, speed: 3.2f, radius: 0.05f, trailTime: 0.25f);
-
-            AddDummyToArena(dummyMat);
 
             var scene = EditorSceneManager.GetActiveScene();
             if (scene.path != ScenePath) scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
@@ -111,23 +108,6 @@ namespace ARSurvival.EditorTools
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
             Object.DestroyImmediate(go);
             return prefab.GetComponent<Projectile>();
-        }
-
-        private static void AddDummyToArena(Material mat)
-        {
-            GameObject root = PrefabUtility.LoadPrefabContents(ArenaPath);
-            if (root.GetComponentInChildren<TrainingDummy>() == null)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);   // keeps its BoxCollider (needed for hits)
-                cube.name = "TrainingDummy (temporary)";
-                cube.transform.SetParent(root.transform, false);
-                cube.transform.localPosition = new Vector3(0f, 0.1f, 0f);
-                cube.transform.localScale = Vector3.one * 0.2f;
-                cube.GetComponent<MeshRenderer>().sharedMaterial = mat;
-                cube.AddComponent<TrainingDummy>();
-            }
-            PrefabUtility.SaveAsPrefabAsset(root, ArenaPath);
-            PrefabUtility.UnloadPrefabContents(root);
         }
 
         // ---------------------------------------------------------------

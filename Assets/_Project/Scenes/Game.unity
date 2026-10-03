@@ -1319,6 +1319,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &2033736286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2033736289}
+  - component: {fileID: 2033736288}
+  - component: {fileID: 2033736287}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2033736287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033736286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a8d3831c80c4be9972c9c30c1d9878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.Enemies.EnemySpawner
+  factory: {fileID: 2033736288}
+  planeManager: {fileID: 1375770594}
+  player: {fileID: 1043678865}
+  minSpawnRadius: 0.9
+  maxSpawnRadius: 1.6
+  minDistanceFromPlayer: 1
+  placementAttempts: 12
+  firstSpawnDelay: 1.5
+--- !u!114 &2033736288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033736286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32994db44ad6c4f2b9f400178f8a1ff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.Enemies.EnemyFactory
+  meleePrefab: {fileID: 1743027772315028942, guid: fc2f44307ec474149b9a7a99ab5eaa60, type: 3}
+  shooterPrefab: {fileID: 4773199490830904091, guid: 8545a7d55fe1d4d8e9e5505da4abf0c0, type: 3}
+  prewarmPerType: 10
+--- !u!4 &2033736289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033736286}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2058090245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,3 +1444,4 @@ SceneRoots:
   - {fileID: 1376857430}
   - {fileID: 1367209586}
   - {fileID: 812855546}
+  - {fileID: 2033736289}
