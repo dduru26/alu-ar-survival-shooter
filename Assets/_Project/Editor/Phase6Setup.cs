@@ -96,7 +96,9 @@ namespace ARSurvival.EditorTools
             var scaler = canvasGo.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1080, 1920);
-            scaler.matchWidthOrHeight = 0.5f;
+            // Expand keeps the full 1080x1920 design visible on any screen shape
+            // (tall iPhones, the Editor's landscape Game view), so nothing overlaps.
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
             UIManager ui = canvasGo.AddComponent<UIManager>();
             Transform root = canvasGo.transform;
@@ -123,19 +125,19 @@ namespace ARSurvival.EditorTools
         {
             GameObject p = Panel(root, "MainMenuPanel", Dim);
 
-            Text(p.transform, "Kicker", "AUGMENTED REALITY", 34, Cyan, new Vector2(0.5f, 0.78f), new Vector2(900, 60), FontStyles.Bold);
-            Text(p.transform, "Title", "SURVIVAL\nSHOOTER", 130, Color.white, new Vector2(0.5f, 0.69f), new Vector2(1000, 330), FontStyles.Bold, lineSpacing: -18);
-            Text(p.transform, "Byline", "by Duru Donald Onyebuchi", 36, Muted, new Vector2(0.5f, 0.595f), new Vector2(900, 60));
+            Text(Frame(p), "Kicker", "AUGMENTED REALITY", 34, Cyan, new Vector2(0.5f, 0.805f), new Vector2(900, 60), FontStyles.Bold);
+            Text(Frame(p), "Title", "SURVIVAL\nSHOOTER", 130, Color.white, new Vector2(0.5f, 0.70f), new Vector2(1000, 330), FontStyles.Bold, lineSpacing: -18);
+            Text(Frame(p), "Byline", "by Duru Donald Onyebuchi", 36, Muted, new Vector2(0.5f, 0.585f), new Vector2(900, 60));
 
-            Text(p.transform, "DifficultyLabel", "DIFFICULTY", 30, Muted, new Vector2(0.5f, 0.49f), new Vector2(900, 50), FontStyles.Bold);
-            Button easy = Btn(p.transform, "EasyButton", "EASY", Ghost, Color.white, new Vector2(0.5f, 0.435f), new Vector2(380, 120), 44, xOffset: -200);
-            Button hard = Btn(p.transform, "HardButton", "HARD", Ghost, Color.white, new Vector2(0.5f, 0.435f), new Vector2(380, 120), 44, xOffset: 200);
-            TMP_Text info = Text(p.transform, "DifficultyInfo", "", 30, Muted, new Vector2(0.5f, 0.385f), new Vector2(960, 50));
+            Text(Frame(p), "DifficultyLabel", "DIFFICULTY", 30, Muted, new Vector2(0.5f, 0.49f), new Vector2(900, 50), FontStyles.Bold);
+            Button easy = Btn(Frame(p), "EasyButton", "EASY", Ghost, Color.white, new Vector2(0.5f, 0.435f), new Vector2(380, 120), 44, xOffset: -200);
+            Button hard = Btn(Frame(p), "HardButton", "HARD", Ghost, Color.white, new Vector2(0.5f, 0.435f), new Vector2(380, 120), 44, xOffset: 200);
+            TMP_Text info = Text(Frame(p), "DifficultyInfo", "", 30, Muted, new Vector2(0.5f, 0.385f), new Vector2(960, 50));
 
-            Button start = Btn(p.transform, "StartButton", "START", Cyan, Ink, new Vector2(0.5f, 0.27f), new Vector2(780, 170), 64);
-            Button board = Btn(p.transform, "LeaderboardButton", "LEADERBOARD", Ghost, Color.white, new Vector2(0.5f, 0.175f), new Vector2(780, 130), 44);
+            Button start = Btn(Frame(p), "StartButton", "START", Cyan, Ink, new Vector2(0.5f, 0.27f), new Vector2(780, 170), 64);
+            Button board = Btn(Frame(p), "LeaderboardButton", "LEADERBOARD", Ghost, Color.white, new Vector2(0.5f, 0.175f), new Vector2(780, 130), 44);
 
-            Text(p.transform, "Footer", "Scan the floor • Place the arena • Hold to shoot • Survive the timer",
+            Text(Frame(p), "Footer", "Scan the floor • Place the arena • Hold to shoot • Survive the timer",
                  28, Muted, new Vector2(0.5f, 0.07f), new Vector2(980, 90));
 
             var panel = p.AddComponent<MainMenuPanel>();
@@ -157,10 +159,10 @@ namespace ARSurvival.EditorTools
         {
             GameObject p = Panel(root, "PlacementPanel", Color.clear, raycast: false);
 
-            GameObject card = Box(p.transform, "HintCard", Card, new Vector2(0.5f, 0.86f), new Vector2(940, 230));
+            GameObject card = Box(Frame(p), "HintCard", Card, new Vector2(0.5f, 0.86f), new Vector2(940, 230));
             TMP_Text hint = Text(card.transform, "Hint", "Move your phone slowly\nto scan the floor", 48, Color.white,
                                  new Vector2(0.5f, 0.5f), new Vector2(880, 200));
-            Button back = Btn(p.transform, "BackButton", "BACK", Ghost, Color.white, new Vector2(0.5f, 0.07f), new Vector2(360, 110), 38);
+            Button back = Btn(Frame(p), "BackButton", "BACK", Ghost, Color.white, new Vector2(0.5f, 0.07f), new Vector2(360, 110), 38);
 
             var panel = p.AddComponent<PlacementPanel>();
             var so = new SerializedObject(panel);
@@ -178,7 +180,7 @@ namespace ARSurvival.EditorTools
         {
             GameObject p = Panel(root, "HUDPanel", Color.clear, raycast: false);
 
-            GameObject bar = Box(p.transform, "TopBar", Card, new Vector2(0.5f, 0.87f), new Vector2(1000, 240), raycast: false);
+            GameObject bar = Box(Frame(p), "TopBar", Card, new Vector2(0.5f, 0.87f), new Vector2(1000, 240), raycast: false);
             Transform b = bar.transform;
 
             // Health (left)
@@ -202,7 +204,7 @@ namespace ARSurvival.EditorTools
             Text(b, "KillsLabel", "KILLS", 26, Muted, new Vector2(0.5f, 0.2f), new Vector2(140, 40), FontStyles.Bold, TextAlignmentOptions.Left);
             TMP_Text kills = Text(b, "KillsValue", "0", 44, Cyan, new Vector2(0.62f, 0.2f), new Vector2(140, 60), FontStyles.Bold, TextAlignmentOptions.Left);
 
-            Text(p.transform, "ShootHint", "Hold anywhere to shoot", 30, new Color(1f, 1f, 1f, 0.6f),
+            Text(Frame(p), "ShootHint", "Hold anywhere to shoot", 30, new Color(1f, 1f, 1f, 0.6f),
                  new Vector2(0.5f, 0.06f), new Vector2(900, 50));
 
             var panel = p.AddComponent<HUDPanel>();
@@ -222,7 +224,7 @@ namespace ARSurvival.EditorTools
         private static GameOverPanel BuildGameOver(Transform root)
         {
             GameObject p = Panel(root, "GameOverPanel", Dim);
-            GameObject card = Box(p.transform, "Card", Card, new Vector2(0.5f, 0.52f), new Vector2(940, 1200));
+            GameObject card = Box(Frame(p), "Card", Card, new Vector2(0.5f, 0.52f), new Vector2(940, 1200));
             Transform c = card.transform;
 
             TMP_Text title = Text(c, "Title", "YOU SURVIVED", 96, Color.white, new Vector2(0.5f, 0.9f), new Vector2(880, 130), FontStyles.Bold);
@@ -261,7 +263,7 @@ namespace ARSurvival.EditorTools
         private static LeaderboardPanel BuildLeaderboard(Transform root, UIManager ui)
         {
             GameObject p = Panel(root, "LeaderboardPanel", Dim);
-            GameObject card = Box(p.transform, "Card", Card, new Vector2(0.5f, 0.52f), new Vector2(1000, 1300));
+            GameObject card = Box(Frame(p), "Card", Card, new Vector2(0.5f, 0.52f), new Vector2(1000, 1300));
             Transform c = card.transform;
 
             Text(c, "Title", "LEADERBOARD", 84, Color.white, new Vector2(0.5f, 0.92f), new Vector2(920, 110), FontStyles.Bold);
@@ -308,8 +310,16 @@ namespace ARSurvival.EditorTools
                 img.color = background;
                 img.raycastTarget = raycast;
             }
+
+            // Fixed 1080x1920 design frame, centred. Content anchors are relative to this,
+            // so spacing never changes with the screen's aspect ratio.
+            var frame = new GameObject("Frame", typeof(RectTransform));
+            frame.transform.SetParent(go.transform, false);
+            Place(frame.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(1080, 1920));
             return go;
         }
+
+        private static Transform Frame(GameObject panel) => panel.transform.Find("Frame");
 
         private static GameObject Box(Transform parent, string name, Color color, Vector2 anchor, Vector2 size, bool raycast = true)
         {
