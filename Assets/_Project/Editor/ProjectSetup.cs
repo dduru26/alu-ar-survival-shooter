@@ -43,6 +43,18 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[ProjectSetup]</color> Phase 1 setup complete.");
         }
 
+        [MenuItem("Tools/AR Survival/Switch Platform to iOS")]
+        public static void SwitchToIOS()
+        {
+            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.iOS, BuildTarget.iOS))
+            {
+                Debug.LogError("[ProjectSetup] iOS Build Support module is not installed for this editor.");
+                return;
+            }
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, BuildTarget.iOS);
+            Debug.Log("<color=#00E5FF>[ProjectSetup]</color> Active platform switched to iOS.");
+        }
+
         // ---------------------------------------------------------------
         // 1. Folders
         // ---------------------------------------------------------------
