@@ -596,11 +596,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.AR.ARPlacementController
   arenaPrefab: {fileID: 5189197656261982942, guid: bb03a1ac585ca4f19aa027cb2785e23a, type: 3}
-  acceptTapsOnStart: 1
+  acceptTapsOnStart: 0
   raycastManager: {fileID: 1375770593}
   planeManager: {fileID: 1375770594}
   anchorManager: {fileID: 1375770592}
   arCamera: {fileID: 1043678870}
+--- !u!1 &1376857427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1376857430}
+  - component: {fileID: 1376857429}
+  - component: {fileID: 1376857428}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1376857428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376857427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17e26e1a1e416fbc8e7b6fc355946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.Core.DebugGameHUD
+  show: 1
+--- !u!114 &1376857429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376857427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b291218babdd49de93b3150b3e52ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.Core.GameManager
+  difficulties:
+  - {fileID: 11400000, guid: ce1f0d52697254fe89c3b9062c67a5ae, type: 2}
+  - {fileID: 11400000, guid: a452c5b225773416c84a0a7281cc607b, type: 2}
+  defaultDifficultyIndex: 0
+  placement: {fileID: 1375770599}
+  planeVisibility: {fileID: 1375770598}
+--- !u!4 &1376857430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376857427}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1574030685
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,3 +769,4 @@ SceneRoots:
   - {fileID: 1574030687}
   - {fileID: 196677021}
   - {fileID: 1375770597}
+  - {fileID: 1376857430}
