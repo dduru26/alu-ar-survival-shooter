@@ -1,0 +1,33 @@
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.pidb
+*.userprefs
+*.suo
+*.user
+
+# Build output
+*.apk
+*.aab
+*.ipa
+*.app
+/iOSBuild/
+
+# OS
+.DS_Store
+Thumbs.db
+crashlytics-build.properties
