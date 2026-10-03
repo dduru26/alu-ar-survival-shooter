@@ -3,7 +3,7 @@
 //  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 3 Setup
 //
 //  1. Creates Difficulty_Easy and Difficulty_Hard assets
-//  2. Adds a "GameManager" object (GameManager + temporary DebugGameHUD)
+//  2. Adds a "GameManager" object (the temporary debug panel was removed in Phase 6)
 //  3. Wires placement/plane references and hands tap control to the
 //     state machine (taps only work in the Placement state)
 // =====================================================================
@@ -39,7 +39,6 @@ namespace ARSurvival.EditorTools
 
             GameManager gm = Object.FindAnyObjectByType<GameManager>();
             if (gm == null) gm = new GameObject("GameManager").AddComponent<GameManager>();
-            if (gm.GetComponent<DebugGameHUD>() == null) gm.gameObject.AddComponent<DebugGameHUD>();
 
             var placement = Object.FindAnyObjectByType<ARPlacementController>();
             var visibility = Object.FindAnyObjectByType<PlaneVisibilityController>();
