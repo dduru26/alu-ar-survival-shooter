@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd667ea792184cfd8ac81b290b2b0d6, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::ARSurvival.Audio.SoundLibrary
+  playerShoot:
+    clip: {fileID: 8300000, guid: 0c7b01cc358514b6eabf22d13c9a5a39, type: 3}
+    volume: 0.55
+    pitchVariation: 0.06
+  playerDeath:
+    clip: {fileID: 8300000, guid: 91f115b71a7664b7a982291367adfc81, type: 3}
+    volume: 0.9
+    pitchVariation: 0
+  enemySpawn:
+    clip: {fileID: 8300000, guid: bb92df49acf1f4b889d6932572483340, type: 3}
+    volume: 0.7
+    pitchVariation: 0.08
+  enemyShoot:
+    clip: {fileID: 8300000, guid: d6d1cd57dd39d4e3c890477e37c71d2d, type: 3}
+    volume: 0.8
+    pitchVariation: 0.08
+  meleeAttack:
+    clip: {fileID: 8300000, guid: c6863b9bd84f84a59843243d67a923a3, type: 3}
+    volume: 1
+    pitchVariation: 0.08
+  enemyHit:
+    clip: {fileID: 8300000, guid: ee3b08a9145674c78a5ea46c24cbb812, type: 3}
+    volume: 0.5
+    pitchVariation: 0.12
+  enemyDeath:
+    clip: {fileID: 8300000, guid: 1512be2b140d8451594ed4c45966460e, type: 3}
+    volume: 0.8
+    pitchVariation: 0.1
+  victory:
+    clip: {fileID: 8300000, guid: 26302e65f2b05434fac739a7e1821694, type: 3}
+    volume: 0.8
+    pitchVariation: 0
+  uiClick:
+    clip: {fileID: 8300000, guid: 6190267e6a27a4321ba15c1197ca6f30, type: 3}
+    volume: 0.8
+    pitchVariation: 0.03
+  uiStart:
+    clip: {fileID: 8300000, guid: eb9339809ee444e778f65562afacedfc, type: 3}
+    volume: 0.8
+    pitchVariation: 0
+  ambientLoop:
+    clip: {fileID: 8300000, guid: 3f897b46ce29548ff95a91c3abab45df, type: 3}
+    volume: 1
+    pitchVariation: 0
