@@ -1,17 +1,3 @@
-// =====================================================================
-//  ProjectSetup.cs  —  AR Survival Shooter (Phase 1 automation)
-//  Editor-only tool. Menu: Tools ▸ AR Survival ▸ Run Phase 1 Setup
-//
-//  What it does (idempotent — safe to run more than once):
-//   1. Creates the Assets/_Project folder structure
-//   2. Applies Player Settings (iOS + Android): company, product,
-//      bundle id, camera usage text, min iOS 15, portrait, IL2CPP/ARM64
-//   3. Builds the clean Game scene: AR Session + XR Origin (Mobile AR)
-//      with AR Plane Manager (Horizontal), AR Raycast Manager and
-//      AR Anchor Manager, plus a temporary default plane prefab
-//   4. Puts Game.unity as the only scene in the build list
-//   5. Sets import settings on the name texture (Repeat wrap, sRGB, alpha)
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Build;
@@ -55,9 +41,6 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[ProjectSetup]</color> Active platform switched to iOS.");
         }
 
-        // ---------------------------------------------------------------
-        // 1. Folders
-        // ---------------------------------------------------------------
         private static void CreateFolders()
         {
             EnsureFolder("Assets", "_Project");
@@ -75,29 +58,21 @@ namespace ARSurvival.EditorTools
                 AssetDatabase.CreateFolder(parent, name);
         }
 
-        // ---------------------------------------------------------------
-        // 2. Player Settings
-        // ---------------------------------------------------------------
         private static void ConfigurePlayerSettings()
         {
             PlayerSettings.companyName = "Brim Studios";
             PlayerSettings.productName = "AR Survival Shooter";
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
 
-            // iOS
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.iOS, BundleId);
             PlayerSettings.iOS.cameraUsageDescription = "Camera is used for augmented reality gameplay.";
             PlayerSettings.iOS.targetOSVersionString = "15.0";
 
-            // Android (backup build path)
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, BundleId);
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
         }
 
-        // ---------------------------------------------------------------
-        // 3. Name texture import settings (tiles across the AR plane)
-        // ---------------------------------------------------------------
         private static void ConfigureNameTexture()
         {
             var importer = AssetImporter.GetAtPath(NameTexturePath) as TextureImporter;
@@ -115,9 +90,6 @@ namespace ARSurvival.EditorTools
             importer.SaveAndReimport();
         }
 
-        // ---------------------------------------------------------------
-        // 4. Game scene
-        // ---------------------------------------------------------------
         private static void CreateGameScene()
         {
             if (System.IO.File.Exists(ScenePath))
@@ -130,7 +102,6 @@ namespace ARSurvival.EditorTools
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
 
-            // XR Origin brings its own AR camera, so remove the default one.
             GameObject defaultCam = GameObject.Find("Main Camera");
             if (defaultCam != null) Object.DestroyImmediate(defaultCam);
 

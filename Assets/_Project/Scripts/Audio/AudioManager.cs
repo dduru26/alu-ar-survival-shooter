@@ -1,19 +1,3 @@
-// =====================================================================
-//  AudioManager.cs  —  Every sound in the game goes through here
-//
-//  Patterns:
-//   • Singleton – one AudioManager (AudioManager.Instance).
-//   • Observer  – it LISTENS to GameEvents and the PlayerShooter; gameplay
-//                 scripts never reference audio, so sound can change without
-//                 touching gameplay code.
-//
-//  AudioSource usage (no needless duplication — enemies have NO AudioSource):
-//   • 1 × 2D source  "SFX 2D"     – player/UI sounds via PlayOneShot (overlaps freely)
-//   • 1 × 2D source  "Ambience"   – looping background drone during a round
-//   • N × 3D sources "Voice 0..N" – small round-robin pool for positional
-//                                   enemy sounds (spawn, enemy shot, hit, death),
-//                                   moved to the event's world position.
-// =====================================================================
 using UnityEngine;
 using UnityEngine.UI;
 using ARSurvival.Core;
@@ -44,7 +28,6 @@ namespace ARSurvival.Audio
         private int nextVoice;
         private float ambienceTarget;
 
-        // -----------------------------------------------------------------
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -97,17 +80,13 @@ namespace ARSurvival.Audio
 
         private void Update()
         {
-            // Smooth fade of the ambience loop in and out.
             if (Mathf.Approximately(ambience.volume, ambienceTarget)) return;
             ambience.volume = Mathf.MoveTowards(ambience.volume, ambienceTarget, Time.unscaledDeltaTime * 0.5f);
             if (ambience.volume <= 0f && ambience.isPlaying) ambience.Stop();
         }
 
-        // -----------------------------------------------------------------
-        // Event handlers
-        // -----------------------------------------------------------------
         private void OnPlayerFired() => Play2D(library.playerShoot);
-        private void OnMeleeAttacked(Vector3 position) => Play2D(library.meleeAttack);     // it hits YOU, so play it close
+        private void OnMeleeAttacked(Vector3 position) => Play2D(library.meleeAttack);
         private void OnEnemySpawned(EnemyType type, Vector3 position) => PlayAt(library.enemySpawn, position);
         private void OnEnemyShot(Vector3 position) => PlayAt(library.enemyShoot, position);
         private void OnEnemyHit(EnemyType type, Vector3 position) => PlayAt(library.enemyHit, position);
@@ -127,13 +106,9 @@ namespace ARSurvival.Audio
             }
         }
 
-        // -----------------------------------------------------------------
-        // Public API
-        // -----------------------------------------------------------------
         public void PlayUIClick() => Play2D(library.uiClick);
         public void PlayUIStart() => Play2D(library.uiStart);
 
-        /// <summary>Non-positional sound (player, UI). Overlapping is fine with PlayOneShot.</summary>
         public void Play2D(SoundLibrary.Sound sound)
         {
             if (sound == null || !sound.IsValid) return;
@@ -141,7 +116,6 @@ namespace ARSurvival.Audio
             sfx2D.PlayOneShot(sound.clip, sound.volume);
         }
 
-        /// <summary>Positional sound at a world point, using the next voice in the pool.</summary>
         public void PlayAt(SoundLibrary.Sound sound, Vector3 position)
         {
             if (sound == null || !sound.IsValid) return;
@@ -155,7 +129,6 @@ namespace ARSurvival.Audio
             voice.Play();
         }
 
-        // -----------------------------------------------------------------
         private AudioSource CreateSource(string sourceName, bool spatial)
         {
             var go = new GameObject(sourceName);
@@ -173,7 +146,6 @@ namespace ARSurvival.Audio
             return src;
         }
 
-        /// <summary>Adds click sounds to every UI button (no extra components needed on buttons).</summary>
         private void HookButtons()
         {
             foreach (Button b in FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None))

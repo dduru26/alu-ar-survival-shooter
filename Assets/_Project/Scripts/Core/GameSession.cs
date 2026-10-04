@@ -1,10 +1,3 @@
-// =====================================================================
-//  GameSession.cs  —  Data for one round (score, kills, time)
-//
-//  Encapsulation: values change only through the methods below, which
-//  also raise the matching GameEvents so the HUD stays in sync.
-//  [Serializable] so the leaderboard can save it as JSON later.
-// =====================================================================
 using System;
 using UnityEngine;
 
@@ -27,7 +20,6 @@ namespace ARSurvival.Core
         public string Difficulty => difficulty;
         public string DateTime => dateTime;
 
-        /// <summary>Seconds left in the round (not saved to the leaderboard).</summary>
         public float TimeRemaining { get; private set; }
 
         public GameSession(string difficultyName, float duration)
@@ -48,7 +40,6 @@ namespace ARSurvival.Core
             GameEvents.RaiseKillsChanged(kills);
         }
 
-        /// <summary>Advances the round clock. Returns true when time has run out.</summary>
         public bool Tick(float deltaTime)
         {
             TimeRemaining = Mathf.Max(0f, TimeRemaining - deltaTime);

@@ -1,17 +1,3 @@
-// =====================================================================
-//  Enemy.cs  —  Abstract base class for every enemy
-//
-//  OOP:
-//   • Abstraction   – Enemy is abstract; you can't spawn a "plain" enemy.
-//   • Inheritance   – MeleeEnemy and ShooterEnemy extend this class and
-//                     reuse its health, movement, hit flash and death code.
-//   • Polymorphism  – each subclass overrides Behave() with its own attack.
-//   • Encapsulation – health and state are private; subclasses use the
-//                     protected helpers (MoveTowardPlayer, PlayerTarget…).
-//
-//  Enemies are pooled by the EnemyFactory (IPoolable) and always stay on
-//  the floor height of the placed arena (the detected AR plane).
-// =====================================================================
 using UnityEngine;
 using ARSurvival.Combat;
 using ARSurvival.Core;
@@ -41,9 +27,7 @@ namespace ARSurvival.Enemies
         public int CurrentHealth => currentHealth;
         public int MaxHealth => maxHealth;
 
-        /// <summary>The player's camera (the phone).</summary>
         protected Transform Player { get; private set; }
-        /// <summary>The player's health component, used by attacks.</summary>
         protected IDamageable PlayerTarget { get; private set; }
         protected float SpeedMultiplier { get; private set; } = 1f;
         protected float DamageMultiplier { get; private set; } = 1f;
@@ -58,7 +42,6 @@ namespace ARSurvival.Enemies
         private MaterialPropertyBlock block;
         private Color[] baseColors;
 
-        // -----------------------------------------------------------------
         protected virtual void Awake()
         {
             baseScale = transform.localScale;
@@ -71,7 +54,6 @@ namespace ARSurvival.Enemies
             }
         }
 
-        /// <summary>Called by the factory each time this enemy is (re)used.</summary>
         public void Initialize(EnemyFactory owner, Transform player, float floorY,
                                float speedMultiplier, float damageMultiplier)
         {
@@ -93,7 +75,6 @@ namespace ARSurvival.Enemies
             GameEvents.RaiseEnemySpawned(Type, transform.position);
         }
 
-        // ---- IPoolable -----------------------------------------------------
         public void OnTakenFromPool() { }
 
         public void OnReturnedToPool()
@@ -103,13 +84,11 @@ namespace ARSurvival.Enemies
             SetFlash(false);
         }
 
-        // -----------------------------------------------------------------
         private void Update()
         {
             if (!initialized) return;
             float dt = Time.deltaTime;
 
-            // Spawn "grow in" so new enemies are easy to notice.
             if (spawnTimer < spawnGrowTime)
             {
                 spawnTimer += dt;
@@ -126,13 +105,10 @@ namespace ARSurvival.Enemies
             Behave(dt, toPlayer.magnitude);
         }
 
-        /// <summary>Per-frame behaviour. distanceToPlayer is measured along the floor.</summary>
         protected abstract void Behave(float deltaTime, float distanceToPlayer);
 
-        /// <summary>Optional hook when the enemy (re)spawns.</summary>
         protected virtual void OnSpawned() { }
 
-        // ---- Shared helpers for subclasses ----------------------------------
         protected Vector3 FlatToPlayer()
         {
             Vector3 d = Player.position - transform.position;
@@ -140,7 +116,6 @@ namespace ARSurvival.Enemies
             return d;
         }
 
-        /// <summary>Walks along the floor toward the player, stopping at stopDistance.</summary>
         protected void MoveTowardPlayer(float stopDistance, float deltaTime)
         {
             Vector3 d = FlatToPlayer();
@@ -149,7 +124,7 @@ namespace ARSurvival.Enemies
 
             float step = Mathf.Min(moveSpeed * SpeedMultiplier * deltaTime, dist - stopDistance);
             Vector3 p = transform.position + d / dist * step;
-            p.y = FloorY;                                    // stay on the AR plane
+            p.y = FloorY;
             transform.position = p;
         }
 
@@ -160,7 +135,6 @@ namespace ARSurvival.Enemies
             transform.rotation = Quaternion.Slerp(transform.rotation, target, turnSpeed * deltaTime);
         }
 
-        // ---- IDamageable ---------------------------------------------------
         public void TakeDamage(int amount, Vector3 hitPoint)
         {
             if (!IsAlive || amount <= 0) return;
@@ -181,7 +155,6 @@ namespace ARSurvival.Enemies
             Despawn();
         }
 
-        /// <summary>Returns the enemy to the factory pool without awarding score.</summary>
         public void Despawn()
         {
             initialized = false;

@@ -1,13 +1,3 @@
-// =====================================================================
-//  PlaneVisibilityController.cs  —  Shows/hides the custom plane tracker
-//
-//  Listens to ARPlacementController. Once the arena is placed it stops
-//  detecting new planes and hides the existing name-plane visuals, so the
-//  tracker only appears while the player is looking for a surface.
-//  On reset it turns detection and visuals back on.
-//
-//  Pattern: Observer (subscribes to ArenaPlaced / PlacementReset).
-// =====================================================================
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 

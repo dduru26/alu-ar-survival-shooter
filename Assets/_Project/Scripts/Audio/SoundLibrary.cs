@@ -1,10 +1,3 @@
-// =====================================================================
-//  SoundLibrary.cs  —  All game sounds in one asset
-//
-//  A ScriptableObject so clips, volumes and pitch variation are tuned in
-//  the Inspector without touching code. The AudioManager only knows
-//  "play the enemy-spawn sound", not which file that is.
-// =====================================================================
 using System;
 using UnityEngine;
 

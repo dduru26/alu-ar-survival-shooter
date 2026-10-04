@@ -1,7 +1,3 @@
-// =====================================================================
-//  ShowWhilePlaying.cs  —  Shows a UI element only during a live round
-//  (used for the crosshair). Observer on GameEvents.StateChanged.
-// =====================================================================
 using UnityEngine;
 using ARSurvival.Core;
 

@@ -1,10 +1,3 @@
-// =====================================================================
-//  DifficultySettings.cs  —  Tunable gameplay values per difficulty
-//
-//  A ScriptableObject asset per mode (Easy, Hard). Gameplay systems read
-//  these numbers instead of hard-coding them, so balancing happens in
-//  the Inspector without touching code (bonus: difficulty levels).
-// =====================================================================
 using UnityEngine;
 
 namespace ARSurvival.Core
@@ -43,7 +36,6 @@ namespace ARSurvival.Core
         public float EnemyDamageMultiplier => enemyDamageMultiplier;
 
 #if UNITY_EDITOR
-        /// <summary>Editor-only helper used by the setup tool to fill in values.</summary>
         public void EditorConfigure(string name, float duration, int health, float interval,
                                     int maxAlive, float shooter, float speed, float damage)
         {

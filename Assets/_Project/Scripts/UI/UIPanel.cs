@@ -1,11 +1,3 @@
-// =====================================================================
-//  UIPanel.cs  —  Abstract base for every screen
-//
-//  Inheritance: MainMenu, Placement, HUD, GameOver and Leaderboard panels
-//  all extend this, sharing the fade in/out and show/hide logic.
-//  Polymorphism: UIManager calls Show()/Hide() on any panel; each panel
-//  overrides OnShow() to refresh its own content.
-// =====================================================================
 using UnityEngine;
 
 namespace ARSurvival.UI
@@ -18,7 +10,6 @@ namespace ARSurvival.UI
         protected CanvasGroup Group { get; private set; }
         public bool IsVisible { get; private set; }
 
-        /// <summary>HUD-style panels return false so taps pass through to the game.</summary>
         protected virtual bool BlocksRaycasts => true;
 
         private float targetAlpha;

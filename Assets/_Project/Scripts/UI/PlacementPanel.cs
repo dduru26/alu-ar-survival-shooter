@@ -1,7 +1,3 @@
-// =====================================================================
-//  PlacementPanel.cs  —  Scanning / tap-to-place instructions with a Back button.
-//  Extends UIPanel (inheritance) and overrides OnShow (polymorphism).
-// =====================================================================
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,13 +1,3 @@
-// =====================================================================
-//  LeaderboardService.cs  —  Local leaderboard (latest 5 sessions)
-//
-//  • Saves every finished round automatically (Observer on GameEvents.GameEnded)
-//  • Persists between app launches with PlayerPrefs (JSON via JsonUtility)
-//  • Keeps ONLY the latest 5 sessions (newest first) — as the brief requires
-//
-//  Encapsulation: the list is private; callers get a read-only view and a
-//  Changed event, and can only add entries through RecordSession().
-// =====================================================================
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +25,6 @@ namespace ARSurvival.Data
 
         public static LeaderboardService Instance { get; private set; }
 
-        /// <summary>Newest first.</summary>
         public IReadOnlyList<LeaderboardEntry> Entries => data.entries;
         public event Action Changed;
 
@@ -62,7 +51,6 @@ namespace ARSurvival.Data
             if (Instance == this) Instance = null;
         }
 
-        /// <summary>Adds a finished round to the top and trims to the latest N.</summary>
         public void RecordSession(GameSession session)
         {
             if (session == null) return;

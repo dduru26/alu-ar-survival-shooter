@@ -1,15 +1,3 @@
-// =====================================================================
-//  EnemySpawner.cs  —  Spawns enemies on the detected AR plane
-//
-//  While a round is playing it spawns an enemy every SpawnInterval
-//  seconds (from DifficultySettings) until MaxAliveEnemies are alive.
-//  Shooter vs Melee is chosen with the difficulty's ShooterChance.
-//
-//  Spawn points are picked in a ring around the placed arena and
-//  ACCEPTED ONLY IF they lie inside a detected horizontal plane's
-//  boundary (point-in-polygon test), so enemies always stand on a real
-//  surface the device has found.
-// =====================================================================
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -64,7 +52,7 @@ namespace ARSurvival.Enemies
 
         private void BeginSpawning()
         {
-            factory.ReleaseAll();               // clean slate on restart
+            factory.ReleaseAll();
             spawning = true;
             nextSpawnTime = Time.time + firstSpawnDelay;
         }
@@ -103,9 +91,6 @@ namespace ARSurvival.Enemies
             factory.Create(type, position, facing, player, arena.position.y, d);
         }
 
-        // -----------------------------------------------------------------
-        // Spawn-point search
-        // -----------------------------------------------------------------
         private Vector3 FindSpawnPoint(Transform arena)
         {
             Vector3 centre = arena.position;
@@ -119,8 +104,6 @@ namespace ARSurvival.Enemies
                 if (IsOnDetectedPlane(candidate)) return candidate;
             }
 
-            // Fallback: just beyond the arena centre, on the side away from the player.
-            // The arena itself was placed on a detected plane, so this stays on the surface.
             Vector3 away = centre - player.position;
             away.y = 0f;
             away = away.sqrMagnitude > 0.0001f ? away.normalized : arena.forward;
@@ -129,7 +112,7 @@ namespace ARSurvival.Enemies
 
         private bool IsOnDetectedPlane(Vector3 worldPoint)
         {
-            if (planeManager == null) return true;   // nothing to check against (e.g. no AR) — allow
+            if (planeManager == null) return true;
 
             bool anyPlane = false;
             foreach (ARPlane plane in planeManager.trackables)
@@ -144,10 +127,6 @@ namespace ARSurvival.Enemies
             return !anyPlane;
         }
 
-        /// <summary>
-        /// ALGORITHM: even–odd ray casting. Casts a ray from the point along +x and
-        /// counts how many polygon edges it crosses; an odd count means "inside".
-        /// </summary>
         private static bool PointInPolygon(Vector2 p, NativeArray<Vector2> polygon)
         {
             if (!polygon.IsCreated || polygon.Length < 3) return false;

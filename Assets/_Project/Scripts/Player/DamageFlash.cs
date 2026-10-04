@@ -1,9 +1,3 @@
-// =====================================================================
-//  DamageFlash.cs  —  Red full-screen flash when the player is hit
-//
-//  Observer: listens for GameEvents.PlayerDamaged and fades a
-//  full-screen UI Image from red back to transparent.
-// =====================================================================
 using UnityEngine;
 using UnityEngine.UI;
 using ARSurvival.Core;
@@ -22,7 +16,7 @@ namespace ARSurvival.Player
         private void Awake()
         {
             image = GetComponent<Image>();
-            image.raycastTarget = false;    // never block taps
+            image.raycastTarget = false;
             SetAlpha(0f);
         }
 

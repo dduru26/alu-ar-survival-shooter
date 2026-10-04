@@ -1,7 +1,3 @@
-// =====================================================================
-//  LeaderboardPanel.cs  —  Shows the latest 5 saved sessions (newest first) with a Back button.
-//  Extends UIPanel (inheritance) and overrides OnShow (polymorphism).
-// =====================================================================
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

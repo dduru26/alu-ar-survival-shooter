@@ -1,13 +1,3 @@
-// =====================================================================
-//  BuildTools.cs  —  One-click builds
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Build iOS (Xcode project)
-//                     Tools ▸ AR Survival ▸ Build Android APK
-//
-//  iOS: Unity exports an Xcode project to <project>/Builds/iOS. Open
-//       Builds/iOS/Unity-iPhone.xcodeproj in Xcode, choose your Team
-//       (Personal Team is fine) and press Run with the iPhone connected.
-//  Builds/ is git-ignored, so build output never ends up in the repo.
-// =====================================================================
 #if UNITY_EDITOR
 using System.IO;
 using System.Linq;
@@ -31,7 +21,7 @@ namespace ARSurvival.EditorTools
                 return;
             }
 
-            PlayerSettings.iOS.appleEnableAutomaticSigning = true;   // pick the Team in Xcode
+            PlayerSettings.iOS.appleEnableAutomaticSigning = true;
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.iOS, ScriptingImplementation.IL2CPP);
 
             string path = Path.Combine(ProjectRoot, "Builds", "iOS");

@@ -1,12 +1,3 @@
-// =====================================================================
-//  Phase3Setup.cs  —  AR Survival Shooter (Phase 3 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 3 Setup
-//
-//  1. Creates Difficulty_Easy and Difficulty_Hard assets
-//  2. Adds a "GameManager" object (the temporary debug panel was removed in Phase 6)
-//  3. Wires placement/plane references and hands tap control to the
-//     state machine (taps only work in the Placement state)
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -30,7 +21,6 @@ namespace ARSurvival.EditorTools
                 return;
             }
 
-            //                                  name    time  hp   spawn max shooter speed dmg
             var easy = GetOrCreateDifficulty("Easy", 90f, 120, 3.2f, 5, 0.30f, 0.85f, 0.8f);
             var hard = GetOrCreateDifficulty("Hard", 120f, 100, 1.8f, 9, 0.45f, 1.25f, 1.3f);
 
@@ -53,7 +43,6 @@ namespace ARSurvival.EditorTools
             so.FindProperty("planeVisibility").objectReferenceValue = visibility;
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            // The state machine now decides when taps place the arena.
             if (placement != null)
             {
                 var pso = new SerializedObject(placement);

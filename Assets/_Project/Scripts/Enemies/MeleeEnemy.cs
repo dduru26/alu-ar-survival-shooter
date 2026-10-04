@@ -1,11 +1,3 @@
-// =====================================================================
-//  MeleeEnemy.cs  —  Walks up to the player and hits at close range
-//
-//  • Moves toward the player
-//  • Short attack range (only damages in close proximity)
-//  • Attack cooldown
-//  • 2 HP → destroyed by 2 player bullets
-// =====================================================================
 using UnityEngine;
 using ARSurvival.Core;
 
@@ -35,7 +27,7 @@ namespace ARSurvival.Enemies
 
         protected override void OnSpawned()
         {
-            nextAttackTime = Time.time + 0.6f;   // brief grace period after spawning
+            nextAttackTime = Time.time + 0.6f;
             lungeTimer = 0f;
             if (lungeVisual != null) lungeVisual.localPosition = lungeRestPosition;
         }

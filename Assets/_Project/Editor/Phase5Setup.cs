@@ -1,14 +1,3 @@
-// =====================================================================
-//  Phase5Setup.cs  —  AR Survival Shooter (Phase 5 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 5 Setup
-//
-//  1. Builds two clearly different placeholder enemies from primitives:
-//       Enemy_Melee   – red armoured "brute" (capsule, visor, fists), 2 HP
-//       Enemy_Shooter – purple hovering drone (orb, glowing ring, barrel), 4 HP
-//     (Models can be swapped for Kenney / poly.pizza assets during polish.)
-//  2. Adds an "Enemies" object with EnemyFactory + EnemySpawner
-//  3. Removes the temporary training dummy from the Arena prefab
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -58,7 +47,6 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[Phase5Setup]</color> Phase 5 setup complete.");
         }
 
-        // ---------------------------------------------------------------
         private static Material Mat(string name, string kind, Color color)
         {
             string path = $"{Root}/Materials/{name}.mat";
@@ -89,13 +77,10 @@ namespace ARSurvival.EditorTools
             return go;
         }
 
-        // ---------------------------------------------------------------
-        // Melee: red armoured brute (~0.42 m tall), pivot on the floor
-        // ---------------------------------------------------------------
         private static MeleeEnemy BuildMelee(Material body, Material dark, Material visor)
         {
             var root = new GameObject("Enemy_Melee");
-            var rig = new GameObject("Rig").transform;          // lunges forward on attack
+            var rig = new GameObject("Rig").transform;
             rig.SetParent(root.transform, false);
 
             GameObject torso = Part(PrimitiveType.Capsule, "Body", rig, new Vector3(0, 0.21f, 0),
@@ -125,9 +110,6 @@ namespace ARSurvival.EditorTools
             return prefab.GetComponent<MeleeEnemy>();
         }
 
-        // ---------------------------------------------------------------
-        // Shooter: purple hover drone, orb ~0.35 m off the floor
-        // ---------------------------------------------------------------
         private static ShooterEnemy BuildShooter(Material body, Material dark, Material glow)
         {
             var root = new GameObject("Enemy_Shooter");
@@ -144,7 +126,6 @@ namespace ARSurvival.EditorTools
             muzzle.SetParent(hover, false);
             muzzle.localPosition = new Vector3(0, -0.04f, 0.23f);
 
-            // Soft dark "shadow" on the floor so it reads as hovering above the plane.
             Part(PrimitiveType.Cylinder, "FloorShadow", root.transform, new Vector3(0, 0.003f, 0),
                  new Vector3(0.22f, 0.001f, 0.22f), dark);
 
@@ -169,7 +150,6 @@ namespace ARSurvival.EditorTools
             return prefab.GetComponent<ShooterEnemy>();
         }
 
-        // ---------------------------------------------------------------
         private static void RemoveDummyFromArena()
         {
             GameObject root = PrefabUtility.LoadPrefabContents(ArenaPath);

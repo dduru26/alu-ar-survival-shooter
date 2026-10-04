@@ -1,7 +1,3 @@
-// =====================================================================
-//  MainMenuPanel.cs  —  Start menu: title, difficulty (Easy/Hard), Start and Leaderboard buttons.
-//  Extends UIPanel (inheritance) and overrides OnShow (polymorphism).
-// =====================================================================
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

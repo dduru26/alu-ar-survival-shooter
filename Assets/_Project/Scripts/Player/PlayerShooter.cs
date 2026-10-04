@@ -1,11 +1,3 @@
-// =====================================================================
-//  PlayerShooter.cs  —  First-person shooting from the phone
-//
-//  Hold a finger on the screen (or the left mouse button in the Editor)
-//  to fire at the crosshair in the centre of the screen. Bullets come
-//  from the Player pool — no Instantiate during gameplay.
-//  Only fires while the game is in the Playing state.
-// =====================================================================
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -27,7 +19,6 @@ namespace ARSurvival.Player
         [Tooltip("Bullets converge on the crosshair at this distance (metres).")]
         [SerializeField, Min(0.5f)] private float aimDistance = 6f;
 
-        /// <summary>Raised every time a bullet is fired (audio plays the shoot sound).</summary>
         public event Action Fired;
         public int ShotsFired { get; private set; }
 
@@ -45,7 +36,6 @@ namespace ARSurvival.Player
         private void Start()
         {
             game = GameManager.Instance;
-            // The tap that places the arena also starts the round — don't let it fire a shot.
             if (game != null) game.RoundStarted += OnRoundStarted;
         }
 
@@ -89,7 +79,7 @@ namespace ARSurvival.Player
             Vector3 aimPoint = cam.position + cam.forward * aimDistance;
             Vector3 direction = (aimPoint - origin).normalized;
 
-            if (pool.Spawn(origin, direction, damagePerShot) == null) return;   // all bullets in flight
+            if (pool.Spawn(origin, direction, damagePerShot) == null) return;
 
             nextFireTime = Time.time + fireInterval;
             ShotsFired++;
@@ -101,7 +91,6 @@ namespace ARSurvival.Player
             Pointer pointer = Pointer.current;
             if (pointer == null || !pointer.press.isPressed) return false;
 
-            // Right mouse is used to look around in XR Simulation — don't shoot while navigating.
             if (Mouse.current != null && Mouse.current.rightButton.isPressed) return false;
 
             return EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject();

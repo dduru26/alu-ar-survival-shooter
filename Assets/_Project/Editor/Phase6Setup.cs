@@ -1,13 +1,3 @@
-// =====================================================================
-//  Phase6Setup.cs  —  AR Survival Shooter (Phase 6 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 6 Setup
-//
-//  Builds the whole UI in the Game scene (portrait, 1080×1920 reference):
-//    GameUI canvas ─ MainMenu, Placement, HUD, GameOver, Leaderboard panels
-//    EventSystem   ─ Input System UI module (touch + mouse)
-//  Adds LeaderboardService to the GameManager and removes the temporary
-//  debug panel. Re-running rebuilds the UI from scratch.
-// =====================================================================
 #if UNITY_EDITOR
 using TMPro;
 using UnityEditor;
@@ -27,7 +17,6 @@ namespace ARSurvival.EditorTools
     {
         private const string ScenePath = "Assets/_Project/Scenes/Game.unity";
 
-        // Palette (matches the cyan name plane)
         private static readonly Color Dim = new Color(0.02f, 0.04f, 0.08f, 0.72f);
         private static readonly Color Card = new Color(0.05f, 0.08f, 0.13f, 0.88f);
         private static readonly Color Cyan = new Color(0f, 0.9f, 1f, 1f);
@@ -63,13 +52,11 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[Phase6Setup]</color> Phase 6 setup complete.");
         }
 
-        // ---------------------------------------------------------------
         private static void SetupGameManager()
         {
             GameManager gm = Object.FindAnyObjectByType<GameManager>();
             if (gm == null) { Debug.LogError("[Phase6Setup] No GameManager in scene."); return; }
 
-            // Remove the temporary debug panel (its script is deleted in this phase).
             GameObjectUtility.RemoveMonoBehavioursWithMissingScript(gm.gameObject);
 
             if (gm.GetComponent<LeaderboardService>() == null) gm.gameObject.AddComponent<LeaderboardService>();
@@ -86,7 +73,6 @@ namespace ARSurvival.EditorTools
             module.AssignDefaultActions();
         }
 
-        // ---------------------------------------------------------------
         private static void BuildUI()
         {
             var canvasGo = new GameObject("GameUI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -96,8 +82,6 @@ namespace ARSurvival.EditorTools
             var scaler = canvasGo.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1080, 1920);
-            // Expand keeps the full 1080x1920 design visible on any screen shape
-            // (tall iPhones, the Editor's landscape Game view), so nothing overlaps.
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
             UIManager ui = canvasGo.AddComponent<UIManager>();
@@ -118,9 +102,6 @@ namespace ARSurvival.EditorTools
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // ---------------------------------------------------------------
-        // Main menu
-        // ---------------------------------------------------------------
         private static MainMenuPanel BuildMainMenu(Transform root, UIManager ui)
         {
             GameObject p = Panel(root, "MainMenuPanel", Dim);
@@ -152,9 +133,6 @@ namespace ARSurvival.EditorTools
             return panel;
         }
 
-        // ---------------------------------------------------------------
-        // Placement hint
-        // ---------------------------------------------------------------
         private static PlacementPanel BuildPlacement(Transform root)
         {
             GameObject p = Panel(root, "PlacementPanel", Color.clear, raycast: false);
@@ -173,9 +151,6 @@ namespace ARSurvival.EditorTools
             return panel;
         }
 
-        // ---------------------------------------------------------------
-        // HUD (nothing here blocks taps)
-        // ---------------------------------------------------------------
         private static HUDPanel BuildHUD(Transform root)
         {
             GameObject p = Panel(root, "HUDPanel", Color.clear, raycast: false);
@@ -183,7 +158,6 @@ namespace ARSurvival.EditorTools
             GameObject bar = Box(Frame(p), "TopBar", Card, new Vector2(0.5f, 0.87f), new Vector2(1000, 240), raycast: false);
             Transform b = bar.transform;
 
-            // Health (left)
             Text(b, "HealthLabel", "HEALTH", 26, Muted, new Vector2(0.27f, 0.8f), new Vector2(440, 40), FontStyles.Bold, TextAlignmentOptions.Left);
             Box(b, "HealthBack", new Color(1f, 1f, 1f, 0.12f), new Vector2(0.27f, 0.58f), new Vector2(440, 44), raycast: false);
             GameObject fillGo = Box(b, "HealthFill", new Color(0.2f, 0.95f, 0.55f), new Vector2(0.27f, 0.58f), new Vector2(440, 44), raycast: false);
@@ -194,11 +168,9 @@ namespace ARSurvival.EditorTools
             fill.fillAmount = 1f;
             TMP_Text hpText = Text(b, "HealthValue", "100", 34, Color.white, new Vector2(0.27f, 0.58f), new Vector2(440, 50), FontStyles.Bold);
 
-            // Time (right)
             Text(b, "TimeLabel", "TIME LEFT", 26, Muted, new Vector2(0.78f, 0.8f), new Vector2(360, 40), FontStyles.Bold);
             TMP_Text time = Text(b, "TimeValue", "1:30", 96, Color.white, new Vector2(0.78f, 0.47f), new Vector2(360, 120), FontStyles.Bold);
 
-            // Score + kills (bottom row)
             Text(b, "ScoreLabel", "SCORE", 26, Muted, new Vector2(0.12f, 0.2f), new Vector2(160, 40), FontStyles.Bold, TextAlignmentOptions.Left);
             TMP_Text score = Text(b, "ScoreValue", "0", 44, Cyan, new Vector2(0.3f, 0.2f), new Vector2(200, 60), FontStyles.Bold, TextAlignmentOptions.Left);
             Text(b, "KillsLabel", "KILLS", 26, Muted, new Vector2(0.5f, 0.2f), new Vector2(140, 40), FontStyles.Bold, TextAlignmentOptions.Left);
@@ -218,9 +190,6 @@ namespace ARSurvival.EditorTools
             return panel;
         }
 
-        // ---------------------------------------------------------------
-        // Game over
-        // ---------------------------------------------------------------
         private static GameOverPanel BuildGameOver(Transform root)
         {
             GameObject p = Panel(root, "GameOverPanel", Dim);
@@ -257,9 +226,6 @@ namespace ARSurvival.EditorTools
             return Text(card, label + " Value", "0", 60, Color.white, new Vector2(0.72f, y), new Vector2(320, 80), FontStyles.Bold, TextAlignmentOptions.Right);
         }
 
-        // ---------------------------------------------------------------
-        // Leaderboard
-        // ---------------------------------------------------------------
         private static LeaderboardPanel BuildLeaderboard(Transform root, UIManager ui)
         {
             GameObject p = Panel(root, "LeaderboardPanel", Dim);
@@ -296,9 +262,6 @@ namespace ARSurvival.EditorTools
             return panel;
         }
 
-        // ---------------------------------------------------------------
-        // Builders
-        // ---------------------------------------------------------------
         private static GameObject Panel(Transform parent, string name, Color background, bool raycast = true)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(CanvasGroup));
@@ -311,8 +274,6 @@ namespace ARSurvival.EditorTools
                 img.raycastTarget = raycast;
             }
 
-            // Fixed 1080x1920 design frame, centred. Content anchors are relative to this,
-            // so spacing never changes with the screen's aspect ratio.
             var frame = new GameObject("Frame", typeof(RectTransform));
             frame.transform.SetParent(go.transform, false);
             Place(frame.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(1080, 1920));
@@ -329,7 +290,7 @@ namespace ARSurvival.EditorTools
             var img = go.GetComponent<Image>();
             img.sprite = rounded;
             img.type = Image.Type.Sliced;
-            img.pixelsPerUnitMultiplier = 0.35f;   // larger corner radius
+            img.pixelsPerUnitMultiplier = 0.35f;
             img.color = color;
             img.raycastTarget = raycast;
             return go;

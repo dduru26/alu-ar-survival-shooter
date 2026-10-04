@@ -1,13 +1,3 @@
-// =====================================================================
-//  Projectile.cs  —  A pooled bullet (player or enemy)
-//
-//  Moves itself each frame and sphere-casts ahead so fast bullets can't
-//  tunnel through thin targets. On hitting an IDamageable of the other
-//  team it deals damage and returns to its pool. It also returns to the
-//  pool when its lifetime ends or it hits a solid surface (e.g. the floor).
-//
-//  Implements IPoolable so the pool can reset it between uses.
-// =====================================================================
 using UnityEngine;
 
 namespace ARSurvival.Combat
@@ -38,7 +28,6 @@ namespace ARSurvival.Combat
             if (trail == null) trail = GetComponent<TrailRenderer>();
         }
 
-        /// <summary>Fires the projectile. Called by ProjectilePool right after Get().</summary>
         public void Launch(Vector3 position, Vector3 dir, int damageAmount, Team team, ProjectilePool pool)
         {
             transform.SetPositionAndRotation(position, Quaternion.LookRotation(dir));
@@ -48,14 +37,13 @@ namespace ARSurvival.Combat
             ownerPool = pool;
             age = 0f;
             inFlight = true;
-            if (trail != null) trail.Clear();   // avoid a streak from the last position it was used at
+            if (trail != null) trail.Clear();
         }
 
-        // ---- IPoolable ---------------------------------------------------
         public void OnTakenFromPool()
         {
             age = 0f;
-            inFlight = false;   // stays still until Launch()
+            inFlight = false;
         }
 
         public void OnReturnedToPool()
@@ -66,7 +54,6 @@ namespace ARSurvival.Combat
             if (trail != null) trail.Clear();
         }
 
-        // ------------------------------------------------------------------
         private void Update()
         {
             if (!inFlight) return;
@@ -80,14 +67,12 @@ namespace ARSurvival.Combat
             transform.position += direction * step;
         }
 
-        /// <summary>Checks the path ahead. Returns true if the projectile was consumed.</summary>
         private bool TryHit(float distance)
         {
             int count = Physics.SphereCastNonAlloc(transform.position, radius, direction, HitBuffer,
                                                    distance, hitMask, QueryTriggerInteraction.Collide);
             if (count == 0) return false;
 
-            // Find the closest hit that isn't on our own team.
             float best = float.MaxValue;
             int bestIndex = -1;
             IDamageable bestTarget = null;
@@ -95,8 +80,8 @@ namespace ARSurvival.Combat
             {
                 Collider col = HitBuffer[i].collider;
                 var target = col.GetComponentInParent<IDamageable>();
-                if (target != null && target.Team == OwnerTeam) continue;   // friendly — pass through
-                if (target == null && col.isTrigger) continue;              // ignore non-combat triggers
+                if (target != null && target.Team == OwnerTeam) continue;
+                if (target == null && col.isTrigger) continue;
                 if (HitBuffer[i].distance < best)
                 {
                     best = HitBuffer[i].distance;

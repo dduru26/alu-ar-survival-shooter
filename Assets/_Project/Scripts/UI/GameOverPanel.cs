@@ -1,7 +1,3 @@
-// =====================================================================
-//  GameOverPanel.cs  —  End screen: result, final score, enemies defeated, time survived, Restart, Main Menu.
-//  Extends UIPanel (inheritance) and overrides OnShow (polymorphism).
-// =====================================================================
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

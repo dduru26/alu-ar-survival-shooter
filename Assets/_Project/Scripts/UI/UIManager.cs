@@ -1,12 +1,3 @@
-// =====================================================================
-//  UIManager.cs  —  Decides which screen is visible
-//
-//  Observer: listens to GameEvents.StateChanged and shows the matching
-//  panel (Menu → MainMenu, Placement → Placement, Playing → HUD,
-//  GameOver → GameOver). The Leaderboard is opened from the menu.
-//  Separation of concerns: panels never switch each other; they ask
-//  the GameManager to change state, and the UIManager reacts.
-// =====================================================================
 using UnityEngine;
 using ARSurvival.Core;
 

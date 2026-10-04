@@ -1,20 +1,5 @@
 #!/usr/bin/env python3
-"""
-generate_sfx.py — procedurally synthesises the original sound effects used in
-AR Survival Shooter (no third-party audio). Pure Python standard library.
-
-Run from the project root:   python3 Tools/generate_sfx.py
-Writes 44.1 kHz mono 16-bit WAV files into Assets/_Project/Audio/Generated/.
-
-Sounds made here:
-  enemy_spawn.wav   rising "materialise" sweep           (Enemy spawn)
-  melee_hit.wav     low punch/thump with crunch          (Melee enemy attack hits player)
-  enemy_hit.wav     short high blip                      (Player bullet hits enemy)
-  enemy_death.wav   small burst + falling tone           (Enemy destroyed)
-  player_death.wav  long falling tone + noise tail       (Player death)
-  victory.wav       rising arpeggio                      (Survived the timer)
-  ambient_loop.wav  quiet seamless low drone (8 s loop)  (Environmental ambience)
-"""
+"""Generates the original sound effects into Assets/_Project/Audio/Generated (run from the project root)."""
 import math
 import os
 import random
@@ -83,7 +68,6 @@ def square(p):
     return 1.0 if math.sin(p) >= 0 else -1.0
 
 
-# ---------------------------------------------------------------- spawn
 def enemy_spawn():
     dur = 0.55
     tone = sweep(180, 950, dur, curve=0.7)
@@ -93,12 +77,11 @@ def enemy_spawn():
         t = i / SR
         trem = 0.6 + 0.4 * math.sin(2 * math.pi * 22 * t)
         shimmer = lp(random.uniform(-1, 1)) * 0.5
-        e = math.sin(math.pi * min(1, t / dur))          # swell in and out
+        e = math.sin(math.pi * min(1, t / dur))
         out.append((s * trem * 0.7 + shimmer) * e)
     return fade(out)
 
 
-# ---------------------------------------------------------------- melee hit
 def melee_hit():
     dur = 0.3
     thump = sweep(110, 40, dur, curve=0.4)
@@ -113,14 +96,12 @@ def melee_hit():
     return fade(out, fout=0.03)
 
 
-# ---------------------------------------------------------------- enemy hit
 def enemy_hit():
     dur = 0.12
     tone = sweep(1400, 650, dur, curve=0.5)
     return fade([s * env_ad(i / SR, dur, 0.002) for i, s in enumerate(tone)])
 
 
-# ---------------------------------------------------------------- enemy death
 def enemy_death():
     dur = 0.5
     tone = sweep(420, 60, dur, wave_fn=saw, curve=0.6)
@@ -133,7 +114,6 @@ def enemy_death():
     return fade(out, fout=0.05)
 
 
-# ---------------------------------------------------------------- player death
 def player_death():
     dur = 1.5
     phase, out = 0.0, []
@@ -148,9 +128,8 @@ def player_death():
     return fade(out, fout=0.1)
 
 
-# ---------------------------------------------------------------- victory
 def victory():
-    notes = [523.25, 659.25, 783.99, 1046.5]   # C5 E5 G5 C6
+    notes = [523.25, 659.25, 783.99, 1046.5]
     out = []
     for n, f in enumerate(notes):
         dur = 0.16 if n < 3 else 0.55
@@ -161,9 +140,8 @@ def victory():
     return fade(out)
 
 
-# ---------------------------------------------------------------- ambient loop
 def ambient_loop():
-    dur = 8.0                     # every frequency below completes whole cycles in 8 s → seamless loop
+    dur = 8.0
     out = []
     for i in range(int(dur * SR)):
         t = i / SR

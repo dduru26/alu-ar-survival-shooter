@@ -1,7 +1,3 @@
-// =====================================================================
-//  HUDPanel.cs  —  In-game HUD: health, score, time remaining and kills (Observer on GameEvents).
-//  Extends UIPanel (inheritance) and overrides OnShow (polymorphism).
-// =====================================================================
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +18,7 @@ namespace ARSurvival.UI
         [SerializeField] private Color healthyColor = new Color(0.2f, 0.95f, 0.55f);
         [SerializeField] private Color lowHealthColor = new Color(1f, 0.25f, 0.2f);
 
-        protected override bool BlocksRaycasts => false;   // taps must reach the shooter
+        protected override bool BlocksRaycasts => false;
 
         private void OnEnable()
         {

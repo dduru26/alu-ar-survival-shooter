@@ -1,13 +1,3 @@
-// =====================================================================
-//  PlayerHealth.cs  —  The player's health (lives on the AR camera)
-//
-//  In this AR game the phone IS the player, so the camera carries the
-//  health and a small hitbox collider. Implements IDamageable so enemy
-//  bullets and melee attacks can hurt it without knowing it's the player.
-//
-//  On damage: updates the HUD (GameEvents), triggers the red screen
-//  flash and a phone vibration. At 0 HP it ends the round (game over).
-// =====================================================================
 using System;
 using UnityEngine;
 using ARSurvival.Combat;
@@ -28,7 +18,6 @@ namespace ARSurvival.Player
         public int Current { get; private set; }
         public int Max { get; private set; }
 
-        /// <summary>Raised when health reaches zero (audio hooks into this for the death sound).</summary>
         public event Action Died;
 
         private GameManager game;
@@ -57,7 +46,7 @@ namespace ARSurvival.Player
         public void TakeDamage(int amount, Vector3 hitPoint)
         {
             if (amount <= 0 || !IsAlive) return;
-            if (game == null || !game.IsPlaying) return;      // no damage outside a live round
+            if (game == null || !game.IsPlaying) return;
             if (Time.time < invulnerableUntil) return;
 
             Current = Mathf.Max(0, Current - amount);

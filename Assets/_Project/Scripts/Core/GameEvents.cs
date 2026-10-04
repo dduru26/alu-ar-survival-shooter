@@ -1,11 +1,3 @@
-// =====================================================================
-//  GameEvents.cs  —  Central event hub
-//
-//  Pattern: Observer / Event System.
-//  Gameplay code raises events here; UI, audio and the leaderboard
-//  subscribe. Neither side holds a reference to the other, which keeps
-//  systems decoupled and easy to test in isolation.
-// =====================================================================
 using System;
 using UnityEngine;
 using ARSurvival.Enemies;
@@ -14,21 +6,19 @@ namespace ARSurvival.Core
 {
     public static class GameEvents
     {
-        // ---- Game flow / HUD ----------------------------------------
         public static event Action<GameStateId> StateChanged;
         public static event Action<int> ScoreChanged;
         public static event Action<int> KillsChanged;
         public static event Action<float> TimeRemainingChanged;
-        public static event Action<int, int> PlayerHealthChanged;   // current, max
+        public static event Action<int, int> PlayerHealthChanged;
         public static event Action PlayerDamaged;
         public static event Action<GameSession> GameEnded;
 
-        // ---- Enemies (used by audio + effects) ----------------------
         public static event Action<EnemyType, Vector3> EnemySpawned;
         public static event Action<EnemyType, Vector3> EnemyHit;
         public static event Action<EnemyType, Vector3> EnemyKilled;
-        public static event Action<Vector3> EnemyShot;        // Shooter fired
-        public static event Action<Vector3> MeleeAttacked;    // Melee hit the player
+        public static event Action<Vector3> EnemyShot;
+        public static event Action<Vector3> MeleeAttacked;
 
         public static void RaiseStateChanged(GameStateId state) => StateChanged?.Invoke(state);
         public static void RaiseScoreChanged(int score) => ScoreChanged?.Invoke(score);

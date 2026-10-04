@@ -1,15 +1,3 @@
-// =====================================================================
-//  GameStates.cs  —  State pattern for the game loop
-//
-//      Menu ──Start──▶ Placement ──arena placed──▶ Playing ──▶ GameOver
-//        ▲                                            ▲            │
-//        └──────────────── Main Menu ─────────────────┴─ Restart ──┘
-//
-//  • Abstraction   – IGameState defines what every state can do.
-//  • Inheritance   – each concrete state extends GameStateBase.
-//  • Polymorphism  – GameStateMachine calls Enter/Tick/Exit without
-//                    knowing which concrete state it holds.
-// =====================================================================
 namespace ARSurvival.Core
 {
     public enum GameStateId { Menu, Placement, Playing, GameOver }
@@ -22,7 +10,6 @@ namespace ARSurvival.Core
         void Exit();
     }
 
-    /// <summary>Shared base: every state can reach the GameManager.</summary>
     public abstract class GameStateBase : IGameState
     {
         protected readonly GameManager Game;
@@ -34,8 +21,6 @@ namespace ARSurvival.Core
         public virtual void Exit() { }
     }
 
-    // -----------------------------------------------------------------
-    /// <summary>Start menu: nothing moves, taps don't place anything.</summary>
     public class MenuState : GameStateBase
     {
         public MenuState(GameManager game) : base(game) { }
@@ -44,8 +29,6 @@ namespace ARSurvival.Core
         public override void Enter() => Game.Placement?.SetAcceptingTaps(false);
     }
 
-    // -----------------------------------------------------------------
-    /// <summary>Player scans the floor and taps to place the arena.</summary>
     public class PlacementState : GameStateBase
     {
         public PlacementState(GameManager game) : base(game) { }
@@ -68,8 +51,6 @@ namespace ARSurvival.Core
         private void OnArenaPlaced(UnityEngine.Transform arena) => Game.BeginRound();
     }
 
-    // -----------------------------------------------------------------
-    /// <summary>The round is live: the clock counts down to a win.</summary>
     public class PlayingState : GameStateBase
     {
         public PlayingState(GameManager game) : base(game) { }
@@ -82,16 +63,12 @@ namespace ARSurvival.Core
         }
     }
 
-    // -----------------------------------------------------------------
-    /// <summary>Round finished: results are shown, waiting for Restart / Menu.</summary>
     public class GameOverState : GameStateBase
     {
         public GameOverState(GameManager game) : base(game) { }
         public override GameStateId Id => GameStateId.GameOver;
     }
 
-    // -----------------------------------------------------------------
-    /// <summary>Holds the current state and handles transitions.</summary>
     public class GameStateMachine
     {
         public IGameState Current { get; private set; }

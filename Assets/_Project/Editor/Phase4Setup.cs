@@ -1,13 +1,3 @@
-// =====================================================================
-//  Phase4Setup.cs  —  AR Survival Shooter (Phase 4 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 4 Setup
-//
-//  1. Materials + PlayerBullet / EnemyBullet prefabs (sphere + trail + Projectile)
-//  2. "Pools" object with a Player pool (30) and an Enemy pool (40)
-//  3. AR camera becomes the player: PlayerHealth, PlayerShooter, hitbox
-//  4. FeedbackCanvas: red DamageFlash overlay + centre crosshair
-//  (The temporary training dummy was removed in Phase 5.)
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -56,7 +46,6 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[Phase4Setup]</color> Phase 4 setup complete.");
         }
 
-        // ---------------------------------------------------------------
         private static Material UnlitMaterial(string path, Color color) =>
             GetOrCreateMaterial(path, "Universal Render Pipeline/Unlit", color);
 
@@ -81,7 +70,7 @@ namespace ARSurvival.EditorTools
         {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = System.IO.Path.GetFileNameWithoutExtension(path);
-            Object.DestroyImmediate(go.GetComponent<Collider>());   // movement uses sphere-casts, not physics
+            Object.DestroyImmediate(go.GetComponent<Collider>());
             go.transform.localScale = Vector3.one * scale;
 
             var mr = go.GetComponent<MeshRenderer>();
@@ -110,7 +99,6 @@ namespace ARSurvival.EditorTools
             return prefab.GetComponent<Projectile>();
         }
 
-        // ---------------------------------------------------------------
         private static void SetupPools(Projectile playerBullet, Projectile enemyBullet)
         {
             GameObject pools = GameObject.Find("Pools") ?? new GameObject("Pools");
@@ -150,7 +138,6 @@ namespace ARSurvival.EditorTools
             so.FindProperty("aimCamera").objectReferenceValue = origin.Camera;
             so.ApplyModifiedPropertiesWithoutUndo();
 
-            // Hitbox around the phone so enemy bullets can hit the player.
             Transform hb = cam.transform.Find("PlayerHitbox");
             GameObject hitbox = hb != null ? hb.gameObject : new GameObject("PlayerHitbox");
             hitbox.transform.SetParent(cam.transform, false);
@@ -176,7 +163,6 @@ namespace ARSurvival.EditorTools
                 scaler.matchWidthOrHeight = 0.5f;
             }
 
-            // Full-screen red flash
             if (canvasGo.transform.Find("DamageFlash") == null)
             {
                 var flash = new GameObject("DamageFlash", typeof(RectTransform), typeof(Image), typeof(DamageFlash));
@@ -189,7 +175,6 @@ namespace ARSurvival.EditorTools
                 img.raycastTarget = false;
             }
 
-            // Crosshair (only visible while playing)
             if (canvasGo.transform.Find("Crosshair") == null)
             {
                 var cross = new GameObject("Crosshair", typeof(RectTransform), typeof(CanvasGroup),

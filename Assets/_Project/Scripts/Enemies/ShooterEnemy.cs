@@ -1,10 +1,3 @@
-// =====================================================================
-//  ShooterEnemy.cs  —  Keeps its distance and fires projectiles
-//
-//  • Moves toward the player, then STOPS at a preferred shooting distance
-//  • Fires pooled enemy bullets at the player (longer range than melee)
-//  • 4 HP → destroyed by 4 player bullets
-// =====================================================================
 using UnityEngine;
 using ARSurvival.Combat;
 using ARSurvival.Core;
@@ -41,7 +34,7 @@ namespace ARSurvival.Enemies
 
         protected override void OnSpawned()
         {
-            nextShotTime = Time.time + Random.Range(1.0f, 1.8f);   // don't fire the instant it appears
+            nextShotTime = Time.time + Random.Range(1.0f, 1.8f);
             hoverPhase = Random.value * Mathf.PI * 2f;
         }
 
@@ -63,7 +56,7 @@ namespace ARSurvival.Enemies
             if (pool == null) return;
 
             Vector3 origin = muzzle != null ? muzzle.position : transform.position + Vector3.up * 0.35f;
-            Vector3 target = Player.position + Vector3.down * 0.1f;     // aim at the phone/chest
+            Vector3 target = Player.position + Vector3.down * 0.1f;
             Vector3 direction = (target - origin).normalized;
             int damage = Mathf.Max(1, Mathf.RoundToInt(bulletDamage * DamageMultiplier));
 

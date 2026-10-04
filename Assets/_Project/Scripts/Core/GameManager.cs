@@ -1,20 +1,10 @@
-// =====================================================================
-//  GameManager.cs  —  Owns the game loop
-//
-//  Pattern: Singleton (one GameManager, reachable via GameManager.Instance)
-//           + State (delegates per-state behaviour to GameStateMachine).
-//
-//  Public API used by UI and gameplay:
-//    StartGame(), Restart(), ReturnToMenu(), SelectDifficulty(i),
-//    AddScore(n), RegisterKill(points), EndRound(survived)
-// =====================================================================
 using System;
 using UnityEngine;
 using ARSurvival.AR;
 
 namespace ARSurvival.Core
 {
-    [DefaultExecutionOrder(-100)]   // initialise before systems that read Instance
+    [DefaultExecutionOrder(-100)]
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
@@ -28,9 +18,7 @@ namespace ARSurvival.Core
         [SerializeField] private ARPlacementController placement;
         [SerializeField] private PlaneVisibilityController planeVisibility;
 
-        /// <summary>Raised when a new round starts (spawner and player listen to this).</summary>
         public event Action RoundStarted;
-        /// <summary>Raised when a round ends, before the GameOver state (used to wipe enemies).</summary>
         public event Action RoundEnded;
 
         public ARPlacementController Placement => placement;
@@ -51,7 +39,6 @@ namespace ARSurvival.Core
         private GameOverState gameOverState;
         private int difficultyIndex;
 
-        // -----------------------------------------------------------------
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -81,23 +68,18 @@ namespace ARSurvival.Core
             if (Instance == this) Instance = null;
         }
 
-        // -----------------------------------------------------------------
-        // Commands (called by UI buttons)
-        // -----------------------------------------------------------------
         public void SelectDifficulty(int index)
         {
             if (difficulties == null || difficulties.Length == 0) return;
             difficultyIndex = Mathf.Clamp(index, 0, difficulties.Length - 1);
         }
 
-        /// <summary>From the menu: place the arena first if needed, otherwise go straight to play.</summary>
         public void StartGame()
         {
             if (placement != null && placement.IsPlaced) BeginRound();
             else stateMachine.ChangeState(placementState);
         }
 
-        /// <summary>Play again in the same arena.</summary>
         public void Restart() => BeginRound();
 
         public void ReturnToMenu()
@@ -106,9 +88,6 @@ namespace ARSurvival.Core
             stateMachine.ChangeState(menuState);
         }
 
-        // -----------------------------------------------------------------
-        // Gameplay hooks (called by player / enemies)
-        // -----------------------------------------------------------------
         public void AddScore(int amount)
         {
             if (IsPlaying) Session.AddScore(amount);
@@ -121,9 +100,6 @@ namespace ARSurvival.Core
             Session.AddScore(points);
         }
 
-        // -----------------------------------------------------------------
-        // Round lifecycle (used by the states)
-        // -----------------------------------------------------------------
         internal void BeginRound()
         {
             DifficultySettings d = Difficulty;
@@ -139,7 +115,6 @@ namespace ARSurvival.Core
             RoundStarted?.Invoke();
         }
 
-        /// <summary>Ends the round. survived = true when the timer ran out, false when the player died.</summary>
         public void EndRound(bool playerSurvived)
         {
             if (!IsPlaying) return;

@@ -1,15 +1,3 @@
-// =====================================================================
-//  Phase2Setup.cs  —  AR Survival Shooter (Phase 2 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 2 Setup
-//
-//  1. Creates materials: NamePlane (your name texture, transparent),
-//     NamePlaneEdge (cyan border), ArenaFloor (translucent disc)
-//  2. Builds NamePlane.prefab from the default plane, using your texture
-//  3. Builds Arena.prefab (placeholder play area)
-//  4. Wires the Game scene: plane manager uses NamePlane, and
-//     ARPlacementController + PlaneVisibilityController go on XR Origin
-//  Safe to run more than once.
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -56,9 +44,6 @@ namespace ARSurvival.EditorTools
             Debug.Log("<color=#00E5FF>[Phase2Setup]</color> Phase 2 setup complete.");
         }
 
-        // ---------------------------------------------------------------
-        // Materials
-        // ---------------------------------------------------------------
         private static Material CreateNamePlaneMaterial()
         {
             var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(TexturePath);
@@ -67,7 +52,6 @@ namespace ARSurvival.EditorTools
             Material mat = CreateUnlitMaterial(NamePlaneMatPath, Color.white, transparent: true);
             mat.SetTexture("_BaseMap", tex);
             mat.mainTexture = tex;
-            // ARPlaneMeshVisualizer makes UVs in metres, so 1 tile = 1 m. 0.6 m tiles read better on a floor.
             mat.SetTextureScale("_BaseMap", new Vector2(1f / 0.6f, 1f / 0.6f));
             mat.SetFloat("_Cull", (float)CullMode.Off);
             EditorUtility.SetDirty(mat);
@@ -89,8 +73,8 @@ namespace ARSurvival.EditorTools
 
             if (transparent)
             {
-                mat.SetFloat("_Surface", 1f);   // Transparent
-                mat.SetFloat("_Blend", 0f);     // Alpha
+                mat.SetFloat("_Surface", 1f);
+                mat.SetFloat("_Blend", 0f);
                 mat.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
                 mat.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
                 mat.SetFloat("_SrcBlendAlpha", (float)BlendMode.One);
@@ -113,9 +97,6 @@ namespace ARSurvival.EditorTools
             return mat;
         }
 
-        // ---------------------------------------------------------------
-        // NamePlane prefab (custom plane tracker)
-        // ---------------------------------------------------------------
         private static GameObject CreateNamePlanePrefab(Material fill, Material edge)
         {
             if (AssetDatabase.LoadAssetAtPath<GameObject>(NamePlanePath) == null)
@@ -152,14 +133,10 @@ namespace ARSurvival.EditorTools
             return AssetDatabase.LoadAssetAtPath<GameObject>(NamePlanePath);
         }
 
-        // ---------------------------------------------------------------
-        // Arena prefab (placeholder play area, replaced/extended later)
-        // ---------------------------------------------------------------
         private static GameObject CreateArenaPrefab(Material floor, Material edge)
         {
             var root = new GameObject("Arena");
 
-            // Translucent disc showing the play area (3 m across).
             GameObject disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             disc.name = "PlayAreaDisc";
             Object.DestroyImmediate(disc.GetComponent<Collider>());
@@ -170,7 +147,6 @@ namespace ARSurvival.EditorTools
             discRenderer.sharedMaterial = floor;
             discRenderer.shadowCastingMode = ShadowCastingMode.Off;
 
-            // Small centre marker so placement is easy to see.
             GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             marker.name = "CentreMarker";
             Object.DestroyImmediate(marker.GetComponent<Collider>());
@@ -179,7 +155,6 @@ namespace ARSurvival.EditorTools
             marker.transform.localScale = new Vector3(0.12f, 0.01f, 0.12f);
             marker.GetComponent<MeshRenderer>().sharedMaterial = edge;
 
-            // Empty used later as the parent for spawned enemies/props.
             var content = new GameObject("Content");
             content.transform.SetParent(root.transform, false);
 
@@ -188,9 +163,6 @@ namespace ARSurvival.EditorTools
             return prefab;
         }
 
-        // ---------------------------------------------------------------
-        // Scene wiring
-        // ---------------------------------------------------------------
         private static void WireScene(GameObject namePlane, GameObject arena)
         {
             var scene = EditorSceneManager.GetActiveScene();
@@ -208,7 +180,6 @@ namespace ARSurvival.EditorTools
             var planeManager = go.GetComponent<ARPlaneManager>();
             if (namePlane != null) planeManager.planePrefab = namePlane;
 
-            // Explicit null checks: in the Editor, GetComponent can return a Unity "fake null", which ?? doesn't catch.
             var placement = go.GetComponent<ARPlacementController>();
             if (placement == null) placement = go.AddComponent<ARPlacementController>();
             var visibility = go.GetComponent<PlaneVisibilityController>();

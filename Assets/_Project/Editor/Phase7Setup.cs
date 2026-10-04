@@ -1,13 +1,3 @@
-// =====================================================================
-//  Phase7Setup.cs  —  AR Survival Shooter (Phase 7 automation)
-//  Editor-only. Menu: Tools ▸ AR Survival ▸ Run Phase 7 Setup
-//
-//  1. Sets import settings for every clip (mono, short SFX decompressed,
-//     ambience streamed + looping-friendly)
-//  2. Creates SoundLibrary.asset and fills in every clip + volume
-//  3. Adds an "AudioManager" object to the Game scene, wired to the library
-//     and the PlayerShooter
-// =====================================================================
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;

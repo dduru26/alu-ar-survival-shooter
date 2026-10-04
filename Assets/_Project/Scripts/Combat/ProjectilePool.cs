@@ -1,12 +1,3 @@
-// =====================================================================
-//  ProjectilePool.cs  —  Scene component wrapping ComponentPool<Projectile>
-//
-//  One pool per team (Player bullets, Enemy bullets). Pools register
-//  themselves so shooters can ask for theirs with ProjectilePool.For(team)
-//  instead of needing a hand-wired reference on every enemy.
-//  All bullets are created in Awake (pre-warm) and recycled forever after.
-//  When a round ends, every live bullet is returned (clean slate).
-// =====================================================================
 using System.Collections.Generic;
 using UnityEngine;
 using ARSurvival.Core;
@@ -29,7 +20,6 @@ namespace ARSurvival.Combat
         public int AvailableCount => pool?.CountAvailable ?? 0;
         public int TotalCount => pool?.CountTotal ?? 0;
 
-        /// <summary>Finds the pool for a team (null if none exists).</summary>
         public static ProjectilePool For(Team team) =>
             Registry.TryGetValue(team, out ProjectilePool p) ? p : null;
 
@@ -56,7 +46,6 @@ namespace ARSurvival.Combat
             if (Registry.TryGetValue(owner, out ProjectilePool p) && p == this) Registry.Remove(owner);
         }
 
-        /// <summary>Takes a bullet from the pool and fires it. Returns null if all bullets are in flight.</summary>
         public Projectile Spawn(Vector3 position, Vector3 direction, int damage)
         {
             Projectile p = pool?.Get();
